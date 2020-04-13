@@ -1,5 +1,6 @@
 """
 This plugin manages hiding/showing tabs according to the number of open views
+https://github.com/croach/SublimeHideTabs/blob/master/hide_tabs.py
 """
 
 import sys
@@ -25,6 +26,7 @@ class HideTabsEventListener(sublime_plugin.EventListener):
 
     # Use the async versions of the event handlers available in Sublime Text 3
     if sublime_text_3():
+
         def on_new_async(self, view):
             self.update_tabs_visibility()
 
@@ -39,6 +41,7 @@ class HideTabsEventListener(sublime_plugin.EventListener):
 
     # Otherwise, just use the synchronous versions if this is Sublime Text 2
     else:
+
         def on_new(self, view):
             sublime.set_timeout(self.update_tabs_visibility, 200)
 
@@ -68,15 +71,18 @@ class HideTabsEventListener(sublime_plugin.EventListener):
             if len(window.views_in_group(i)) > 1:
                 self.tabs_visible = True
                 break
-        else:
-            self.tabs_visible = False
+            else:
+                self.tabs_visible = False
 
     def _get_tabs_visible(self):
         window = sublime.active_window()
         return HideTabsEventListener._tabs_visibility[window.id()]
+
     def _set_tabs_visible(self, visible):
         window = sublime.active_window()
-        if self.tabs_visible != visible:
-            window.run_command('toggle_tabs')
+        window.set_tabs_visible(visible)
+        # if self.tabs_visible != visible:
+            # window.run_command("toggle_tabs")
         HideTabsEventListener._tabs_visibility[window.id()] = visible
+
     tabs_visible = property(_get_tabs_visible, _set_tabs_visible)
