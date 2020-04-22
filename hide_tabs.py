@@ -67,12 +67,12 @@ class HideTabsEventListener(sublime_plugin.EventListener):
 
         # Loop through all of the groups (split windows), and if any have
         # more than one view, show tabs, otherwise, hide them
+        tabs_visible = False
         for i in range(window.num_groups()):
             if len(window.views_in_group(i)) > 1:
-                self.tabs_visible = True
+                tabs_visible = True
                 break
-            else:
-                self.tabs_visible = False
+        self.tabs_visible = tabs_visible
 
     def _get_tabs_visible(self):
         window = sublime.active_window()
